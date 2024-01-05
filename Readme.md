@@ -28,7 +28,11 @@ Using your cloud instance of choice do the following
         - Use the token account you created from earlier.
         - Use the local worker pool from earlier.
     - Go to Library -> Git Credentials.
-        - Add a new GitHub PAT token for your user.
+        - Add a new GitHub PAT token for your user.  
+            - The PAT will need explict access to OctopusSamples.  
+            - Create a fine-grained key
+            - Set the resource owner to OctopusSamples
+            - Select Public Repositories (read-only) as the option.
         - Username will be your username.
     - Go to Library -> Feeds
         - Add a docker hub feed
