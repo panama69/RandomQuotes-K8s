@@ -95,34 +95,40 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
         - Values: randomquotestest.local Environment: Test
         - Values: randomquotesstaging.local Environment: Staging
         - Values: randomquotesprod.local Environment: Production
-        - Type: String
+        - Type: Text
     - Name: spec:template:spec:containers:0:image
         - Value: octopussamples/randomquotes-k8s:#{Octopus.Action.Package[randomquotes-k8s].PackageVersion}
-        - Type: String
+        - Type: Text
     - Name: stringData:homepageDisplay
         - Value: [Your Choice]
         - Type: Sensitive
 - Go to the deployment process
-    - Add a RAW Kubernetes YAML Step
+    - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Create Random Quotes Secret
         - Worker Pool: Use the local worker pool
+        - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
         - Repository URL: https://github.com/OctopusSamples/RandomQuotes-K8s.git 
         - Branch Settings: main
         - Paths: k8s/base/randomquotes-secrets.yaml
-    - Add a RAW Kubernetes YAML Step
+        - Structured Configuration Valures: Check the `Enable Structured Configuration Variables` checkbox
+        - Namespace: #{Octopus.Environment.Name | ToLower}
+    - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Deploy Random Quotes
         - Worker Pool: Use the local worker pool
+        - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
         - Repository URL: https://github.com/OctopusSamples/RandomQuotes-K8s.git 
         - Branch Settings: main
         - Paths: k8s/base/randomquotes-deployment.yaml
+        - Structured Configuration Valures: Check the `Enable Structured Configuration Variables` checkbox
         - Referenced Packages: 
             - Package Feed: DockerHub
             - PackageId: octopussamples/randomquotes-k8s
             - Name: randomquotes-k8s
+        - Namespace: #{Octopus.Environment.Name | ToLower}
     - Save the deployment process
 - Create a release and deploy it to dev.
 - Test by going to randomquotesdev.local.
