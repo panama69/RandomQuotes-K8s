@@ -4,15 +4,21 @@ The docker image is built using a GitHub action and it is pushed to Docker Hub. 
 
 # Prep Work
 
-- Install minikube, rancher desktop, or docker desktop locally.  
-- Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
+## 1. Install K8s
+Install minikube, rancher desktop, or docker desktop locally.  
+
+## 2. Configure K8s
+Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
     - Run the following commands:
         - Create all the namespaces: `kubectl apply -f namespaces.yaml`
         - Create the service account for deployments: `kubectl apply -f service-account-and-token.yaml`
         - To get the token value run: `kubectl describe secret octopus-svc-account-token`.  Copy the token to a file for future usage.
         - Install the NGINX Ingress Controller: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.5/deploy/static/provider/cloud/deploy.yaml`
         - Run `kubectl describe service kubernetes`.  Copy the endpoint, for example `172.18.135.254:6443` for later.
-- Using your cloud instance of choice do the following
+
+## 3. Pre-Configure Octopus
+Using your cloud instance of choice do the following
+
     - Create a local worker pool.
     - Install a polling tentacle locally and assign it to that local worker pool.  This will be used to deploy to k8s.
     - Go to Infrastructure -> Accounts. Add the token from the earlier step.
@@ -28,7 +34,8 @@ The docker image is built using a GitHub action and it is pushed to Docker Hub. 
         - Add a docker hub feed
         - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
 
-- Go to your hosts file (if on Windows) and add the following entries.  The nginx ingress controller uses host headers for all routing.
+## 4. Configure your hosts file.
+- Go to your hosts file (if on Windows) and add the following entries.  The nginx ingress controller uses host headers for all routing.  Doing this will allow you to easily access the application running on your k8s cluster.
 
 ```
 127.0.0.1       randomquotes.local
