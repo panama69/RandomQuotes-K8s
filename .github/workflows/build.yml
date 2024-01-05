@@ -43,5 +43,5 @@ jobs:
               working-directory: src
               run: | 
                   docker build -f "./RandomQuotes.Web/Dockerfile" --tag octopussamples/randomquotes-k8s:${{ steps.determine_version.outputs.semVer }} --tag octopussamples/randomquotes-k8s:latest .                  
-                  docker push octopussamples/randomquotes-k8s:${{ steps.ReleaseNum.outputs.APP_VERSION }}                   
+                  docker push octopussamples/randomquotes-k8s:${{ steps.determine_version.outputs.semVer }}                   
                   docker push octopussamples/randomquotes-k8s:latest  
