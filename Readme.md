@@ -6,6 +6,8 @@ The docker image is built using a GitHub action and it is pushed to Docker Hub. 
 
 The docker image, manifest files, and variables will be provided to you.  You need to provide a k8s cluster, octopus instance, and worker.
 
+**You MUST finish all the prep work prior to RKO.  We will not wait for you to install K8s, configure a worker, or update your hosts file.**
+
 ## 1. Install K8s
 Install minikube, rancher desktop, or docker desktop locally.  
 
