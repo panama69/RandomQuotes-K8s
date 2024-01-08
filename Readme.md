@@ -4,42 +4,44 @@ The docker image is built using a GitHub action and it is pushed to Docker Hub. 
 
 # Prep Work
 
+The docker image, manifest files, and variables will be provided to you.  You need to provide a k8s cluster, octopus instance, and worker.
+
 ## 1. Install K8s
 Install minikube, rancher desktop, or docker desktop locally.  
 
 ## 2. Configure K8s
 Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
-    - Run the following commands:
-        - Create all the namespaces: `kubectl apply -f namespaces.yaml`
-        - Create the service account for deployments: `kubectl apply -f service-account-and-token.yaml`
-        - To get the token value run: `kubectl describe secret octopus-svc-account-token`.  Copy the token to a file for future usage.
-        - Install the NGINX Ingress Controller: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.5/deploy/static/provider/cloud/deploy.yaml`
-        - Run `kubectl describe service kubernetes`.  Copy the endpoint, for example `172.18.135.254:6443` for later.
+- Run the following commands:
+    - Create all the namespaces: `kubectl apply -f namespaces.yaml`
+    - Create the service account for deployments: `kubectl apply -f service-account-and-token.yaml`
+    - To get the token value run: `kubectl describe secret octopus-svc-account-token`.  Copy the token to a file for future usage.
+    - Install the NGINX Ingress Controller: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.5/deploy/static/provider/cloud/deploy.yaml`
+    - Run `kubectl describe service kubernetes`.  Copy the endpoint, for example `172.18.135.254:6443` for later.
 
 ## 3. Pre-Configure Octopus
-Using your cloud instance of choice do the following
+Using your cloud instance of choice do the following:
 
-    - Create a local worker pool.
-    - Install a polling tentacle locally and assign it to that local worker pool.  This will be used to deploy to k8s.
-    - Go to Infrastructure -> Accounts. Add the token from the earlier step.
-    - Go to Infrastructure -> Targets.  Add the kubernetes cluster.  
-        - Use the endpoint IP address from earlier.  For example `https://172.18.135.254:6443`
-        - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
-        - Use the token account you created from earlier.
-        - Use the local worker pool from earlier.
-    - Go to Library -> Git Credentials.
-        - Add a new GitHub PAT token for your user.  
-            - The PAT will need explict access to OctopusSamples.  
-            - Create a fine-grained key
-            - Set the resource owner to OctopusSamples
-            - Select Public Repositories (read-only) as the option.
-        - Username will be your username.
-    - Go to Library -> Feeds
-        - Add a docker hub feed
-        - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
+- Create a local worker pool.
+- Install a polling tentacle locally and assign it to that local worker pool.  This will be used to deploy to k8s.
+- Go to Infrastructure -> Accounts. Add the token from the earlier step.
+- Go to Infrastructure -> Targets.  Add the kubernetes cluster.  
+    - Use the endpoint IP address from earlier.  For example `https://172.18.135.254:6443`
+    - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
+    - Use the token account you created from earlier.
+    - Use the local worker pool from earlier.
+- Go to Library -> Git Credentials.
+    - Add a new GitHub PAT token for your user.  
+        - The PAT will need explict access to OctopusSamples.  
+        - Create a fine-grained key
+        - Set the resource owner to OctopusSamples
+        - Select Public Repositories (read-only) as the option.
+    - Username will be your username.
+- Go to Library -> Feeds
+    - Add a docker hub feed
+    - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
 
 ## 4. Configure your hosts file.
-- Go to your hosts file (if on Windows) and add the following entries.  The nginx ingress controller uses host headers for all routing.  Doing this will allow you to easily access the application running on your k8s cluster.
+Go to your hosts file (if on Windows) and add the following entries.  The nginx ingress controller uses host headers for all routing.  Doing this will allow you to easily access the application running on your k8s cluster.
 
 ```
 127.0.0.1       randomquotes.local
@@ -49,7 +51,11 @@ Using your cloud instance of choice do the following
 127.0.0.1       randomquotesprod.local
 ```
 
-# Basic Deployment 
+# 200 Session at RKO
+
+All the activities below will be done at RKO.
+
+## 1. First Activity - Basic Deployment 
 
 In the first activity we will do a standard manifest file deployment to the default namespace in kubernetes using `kubectl apply`.
 
@@ -72,7 +78,7 @@ It might take a moment for the deployment to finish.  I like to check the status
 
 Once the deployment is finished go to http://randomquotes.local.
 
-# Leveraging Kustomize
+## 2. Second Activity - Leveraging Kustomize
 
 In the second activity we will deploy to each of the environment namespaces using kustomize and overlays.
 
@@ -93,7 +99,7 @@ We are going to deploy to all four namespaces.  The instructions are the same, s
 - Once the deployment is over go to http://randomquotes[environment name].local
 - Assuming everything is working, repeat the following steps for each environment.
 
-# Using Octopus Deploy
+## 3. Third Activity - Using Octopus Deploy
 
 In the final activity we will configure Octopus Deploy to deploy our application to k8s using the manifest files.
 
