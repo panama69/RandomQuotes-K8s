@@ -103,7 +103,7 @@ We are going to deploy to all four namespaces.  The instructions are the same, s
 
 ## 3. Third Activity - Using Octopus Deploy
 
-In the final activity we will configure Octopus Deploy to deploy our application to k8s using the manifest files.
+In the third activity we will configure Octopus Deploy to deploy our application to k8s using the manifest files.
 
 In this example, we will put the kustomize overlays aside and instead use Octopus' raw yaml steps + structured variable configuration.
 
@@ -152,3 +152,30 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
 - Create a release and deploy it to dev.
 - Test by going to randomquotesdev.local.
 - Promote the release through each environment.  Test along the way.
+
+## 4. Fourth Activity - ArgoCD
+
+This activity will happen only if we have enough time.  We will install and configure ArgoCD so we can compare and contrast the two.
+
+- Install ArgoCD
+    - Run `kubectl create namespace argocd`
+    - Run `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+- To access ArgoCD UI
+    - Run `kubectl port-forward svc/argocd-server -n argocd 8080:443`
+    - **Important** The port forwarding will only work while that window is open.
+    - If you want to, you can mess with ingress rules, but this is the quick and dirty approach to getting going.
+    - To login
+        - Username is admin
+        - Run `kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' --namespace argocd` to get the password
+- Configure first application 
+    - Click the `New App` button
+    - Application Name: `randomquotes-dev`
+    - Project Name: `Default`
+    - Repository URL: `https://github.com/OctopusSamples/RandomQuotes-K8s.git`    
+    - Paths: `k8s/overlays/dev`
+    - Cluster Url: `https://kubernetes.default.svc`
+    - Namespace: `development`
+    - Click the `Create` button
+    - Click the `Sync` button
+    - Go to randomquotesdev.local to verify it is running
+- Repeat the above section for test, staging, and production
