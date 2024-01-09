@@ -9,7 +9,11 @@ The docker image, manifest files, and variables will be provided to you.  You ne
 **You MUST finish all the prep work prior to RKO.  We will not wait for you to install K8s, configure a worker, or update your hosts file.**
 
 ## 1. Install K8s
-Install minikube, rancher desktop, or docker desktop locally.  
+Install ONE of the following on a VM or locally!
+
+- [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [rancher desktop](https://docs.rancherdesktop.io/getting-started/installation)
+- [docker desktop](https://docs.docker.com/desktop/)
 
 ## 2. Configure K8s
 Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
