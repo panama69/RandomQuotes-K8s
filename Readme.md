@@ -27,11 +27,11 @@ Open up a command prompt or terminal.  Change the current directory in the termi
 ## 3. Pre-Configure Octopus
 Using your cloud instance of choice do the following:
 
-- Create a worker pool name "Local Worker Pool".
+- Create a worker pool name "Local K8s Worker Pool".
 - Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
     - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
     - Run `kubectl apply -f octopus-tentacle.yaml`
-    - WAIT until the worker shows up as healthy in your local worker pool
+    - WAIT until the worker shows up as healthy in your Local K8s Worker Pool
 - Go to Library -> Feeds
     - Add a docker hub feed
     - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
@@ -40,7 +40,7 @@ Using your cloud instance of choice do the following:
     - Use the endpoint IP address from earlier.  For example `https://172.18.135.254:6443`
     - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
     - Use the token account you created from earlier.
-    - Use the local worker pool from earlier.
+    - Use the Local K8s Worker Pool from earlier.
     - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
 - Go to Library -> Git Credentials.
     - Add a new GitHub PAT token for your user.  
@@ -132,7 +132,7 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
 - Go to the deployment process
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Create Random Quotes Secret
-        - Worker Pool: Use the local worker pool
+        - Worker Pool: Use the Local K8s Worker Pool
         - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
@@ -144,7 +144,7 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
         - Namespace: #{Octopus.Environment.Name | ToLower}
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Deploy Random Quotes
-        - Worker Pool: Use the local worker pool
+        - Worker Pool: Use the Local K8s Worker Pool
         - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository

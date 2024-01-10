@@ -44,7 +44,7 @@ spec:
            - name: Space
              value: "Default"
            - name: TargetWorkerPool
-             value: "Local Worker Pool"
+             value: "Local K8s Worker Pool"
            - name: ACCEPT_EULA
              value: "Y"
            - name: DISABLE_DIND
