@@ -31,6 +31,7 @@ Using your cloud instance of choice do the following:
 - Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
     - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
     - Run `kubectl apply -f octopus-tentacle.yaml`
+    - WAIT until the worker shows up as healthy in your local worker pool
 - Go to Library -> Feeds
     - Add a docker hub feed
     - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
