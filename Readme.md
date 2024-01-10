@@ -27,14 +27,20 @@ Open up a command prompt or terminal.  Change the current directory in the termi
 ## 3. Pre-Configure Octopus
 Using your cloud instance of choice do the following:
 
-- Create a local worker pool.
-- Install a polling tentacle locally and assign it to that local worker pool.  This will be used to deploy to k8s.
+- Create a worker pool name "Local Worker Pool".
+- Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
+    - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
+    - Run `kubectl apply -f octopus-tentacle.yaml`
+- Go to Library -> Feeds
+    - Add a docker hub feed
+    - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
 - Go to Infrastructure -> Accounts. Add the token from the earlier step.
 - Go to Infrastructure -> Targets.  Add the kubernetes cluster.  
     - Use the endpoint IP address from earlier.  For example `https://172.18.135.254:6443`
     - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
     - Use the token account you created from earlier.
     - Use the local worker pool from earlier.
+    - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
 - Go to Library -> Git Credentials.
     - Add a new GitHub PAT token for your user.  
         - The PAT will need explict access to OctopusSamples.  
@@ -42,9 +48,6 @@ Using your cloud instance of choice do the following:
         - Set the resource owner to OctopusSamples
         - Select Public Repositories (read-only) as the option.
     - Username will be your username.
-- Go to Library -> Feeds
-    - Add a docker hub feed
-    - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
 
 ## 4. Configure your hosts file.
 Go to your hosts file (if on Windows) and add the following entries.  The nginx ingress controller uses host headers for all routing.  Doing this will allow you to easily access the application running on your k8s cluster.
@@ -129,6 +132,7 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Create Random Quotes Secret
         - Worker Pool: Use the local worker pool
+        - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
@@ -140,6 +144,7 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Deploy Random Quotes
         - Worker Pool: Use the local worker pool
+        - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
