@@ -14,6 +14,9 @@ Install ONE of the following on a VM or locally!
 - [minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [rancher desktop](https://docs.rancherdesktop.io/getting-started/installation)
 - [docker desktop](https://docs.docker.com/desktop/)
+  - 🍎 If you are working on a Mac with an Apple chip—Docker Desktop is the easiest option:
+    - Run [`softwareupdate --install-rosetta`](https://docs.docker.com/desktop/install/mac-install/#system-requirements)
+    - Enable [Kubernetes](https://docs.docker.com/desktop/kubernetes/#install-and-turn-on-kubernetes)
 
 ## 2. Configure K8s
 Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
@@ -31,6 +34,8 @@ Using your cloud instance of choice do the following:
 - Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
     - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
     - Run `kubectl apply -f octopus-tentacle.yaml`
+      - 🍎 Alternatively—if you are working on a Mac and Apple chip:
+        - Run `docker run --env ServerApiKey=YOUR_API_KEY --env ServerUrl=YOUR_SERVER_URL --env Space=Default --env TargetWorkerPool="Local K8s Worker Pool" --env ACCEPT_EULA=Y --env DISABLE_DIND=N --env ServerPort=10943 --env TargetName="Docker Worker" --platform linux/amd64 --privileged octopusdeploy/tentacle:8.1.563`
     - WAIT until the worker shows up as healthy in your Local K8s Worker Pool
 - Go to Library -> Feeds
     - Add a docker hub feed
