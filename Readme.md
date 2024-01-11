@@ -17,6 +17,7 @@ Install ONE of the following on a VM or locally!
   - 🍎 If you are working on a Mac with an Apple chip—Docker Desktop is the easiest option:
     - Run [`softwareupdate --install-rosetta`](https://docs.docker.com/desktop/install/mac-install/#system-requirements)
     - Enable [Kubernetes](https://docs.docker.com/desktop/kubernetes/#install-and-turn-on-kubernetes)
+    - Confirm `Use Virtualization framework` is enabled in Docker Desktop → General → Settings
 
 ## 2. Configure K8s
 Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
