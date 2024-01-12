@@ -6,7 +6,7 @@ WORKDIR /app
 EXPOSE 8080
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG TARGETARCH
+ARG TARGETARCH=linux/amd64
 WORKDIR /src
 COPY ["RandomQuotes.Web/RandomQuotes.Web.csproj", "RandomQuotes.Web/"]
 RUN dotnet restore "RandomQuotes.Web/RandomQuotes.Web.csproj" -a $TARGETARCH
