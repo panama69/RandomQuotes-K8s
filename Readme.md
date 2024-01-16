@@ -26,7 +26,8 @@ Open up a command prompt or terminal.  Change the current directory in the termi
     - Create the service account for deployments: `kubectl apply -f service-account-and-token.yaml`
     - To get the token value run: `kubectl describe secret octopus-svc-account-token`.  Copy the token to a file for future usage.
     - Install the NGINX Ingress Controller: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.5/deploy/static/provider/cloud/deploy.yaml`
-    - Run `kubectl describe service kubernetes`.  Copy the endpoint, for example `172.18.135.254:6443` for later.
+    - If you are running rancher desktop or minikube
+        - Run `kubectl describe service kubernetes`.  Copy the endpoint, for example `172.18.135.254:6443` for later.
 
 ## 3. Pre-Configure Octopus
 Using your cloud instance of choice do the following:
@@ -45,7 +46,9 @@ Using your cloud instance of choice do the following:
     - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
 - Go to Infrastructure -> Accounts. Add the token from the earlier step.
 - Go to Infrastructure -> Targets.  Add the kubernetes cluster.  
-    - Use the endpoint IP address from earlier.  For example `https://172.18.135.254:6443`
+    - If you are using docker desktop it should be: `https://kubernetes.docker.internal:6443/`
+    - If you are running rancher desktop or minikube:
+        - Use the endpoint IP address from earlier. For example `https://172.18.135.254:6443`
     - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
     - Use the token account you created from earlier.
     - Use the Local K8s Worker Pool from earlier.
