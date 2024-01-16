@@ -11,13 +11,13 @@ The docker image, manifest files, and variables will be provided to you.  You ne
 ## 1. Install K8s
 Install ONE of the following on a VM or locally!
 
-- [minikube](https://minikube.sigs.k8s.io/docs/start/)
-- [rancher desktop](https://docs.rancherdesktop.io/getting-started/installation)
-- [docker desktop](https://docs.docker.com/desktop/)
+- [docker desktop](https://docs.docker.com/desktop/) - easiest and preferred
   - 🍎 If you are working on a Mac with an Apple chip—Docker Desktop is the easiest option:
     - Run [`softwareupdate --install-rosetta`](https://docs.docker.com/desktop/install/mac-install/#system-requirements)
     - Enable [Kubernetes](https://docs.docker.com/desktop/kubernetes/#install-and-turn-on-kubernetes)
     - Confirm `Use Virtualization framework` is enabled in Docker Desktop → General → Settings
+- [rancher desktop](https://docs.rancherdesktop.io/getting-started/installation) -> please note you will not have to install docker for this to work.
+- [minikube](https://minikube.sigs.k8s.io/docs/start/)
 
 ## 2. Configure K8s
 Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
@@ -32,12 +32,14 @@ Open up a command prompt or terminal.  Change the current directory in the termi
 Using your cloud instance of choice do the following:
 
 - Create a worker pool name "Local K8s Worker Pool".
-- Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/provision` folder in this repo.
-    - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
-    - Run `kubectl apply -f octopus-tentacle.yaml`
-      - 🍎 Alternatively—if you are working on a Mac with an Apple chip:
-        - Run `docker run --env ServerApiKey=YOUR_API_KEY --env ServerUrl=YOUR_SERVER_URL --env Space=Default --env TargetWorkerPool="Local K8s Worker Pool" --env ACCEPT_EULA=Y --env DISABLE_DIND=N --env ServerPort=10943 --env TargetName="Docker Worker" --platform linux/amd64 --privileged octopusdeploy/tentacle:8.1.563`
-    - WAIT until the worker shows up as healthy in your Local K8s Worker Pool
+- Ensure you have the following environments: "Development", "Test", "Staging", "Production"
+- Install a tentacle to connect to Octopus Deploy
+    - Option A: Install a polling tentacle directly on your machine (preferred and easiest).
+    - Option B: Run the tentacle as a docker container.  Run `docker run --env ServerApiKey=YOUR_API_KEY --env ServerUrl=YOUR_SERVER_URL --env Space=Default --env TargetWorkerPool="Local K8s Worker Pool" --env ACCEPT_EULA=Y --env DISABLE_DIND=N --env ServerPort=10943 --env TargetName="Docker Worker" --platform linux/amd64 --privileged octopusdeploy/tentacle:8.1.563` 
+    - Option C: Run the tentacle from Kubernetes.  
+        - In a file explorer, go to `octopus-tentacle.yaml` file and replace `YOUR_API_KEY` and `YOUR_SERVER_URL` with your API key and server URL.
+        - Run `kubectl apply -f octopus-tentacle.yaml`
+    - WAIT until the worker shows up as healthy in your Local K8s Worker Pool.
 - Go to Library -> Feeds
     - Add a docker hub feed
     - Provide your username and PAT or a service account username and PAT otherwise you won't be able to create releases.
@@ -47,7 +49,10 @@ Using your cloud instance of choice do the following:
     - Ensure the checkbox `Skip TLS Verification` is checked to make things easier.
     - Use the token account you created from earlier.
     - Use the Local K8s Worker Pool from earlier.
-    - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
+    - Assign it to all four environments from earlier.
+    - Use the role `local-k8s`.
+    - **If you are running the tentacle in a container**
+        - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
 - Go to Library -> Git Credentials.
     - Add a new GitHub PAT token for your user.  
         - The PAT will need explict access to OctopusSamples.  
@@ -139,7 +144,8 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Create Random Quotes Secret
         - Worker Pool: Use the Local K8s Worker Pool
-        - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
+        - **If you are running the tentacle in a container**
+            - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
@@ -151,7 +157,8 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Deploy Random Quotes
         - Worker Pool: Use the Local K8s Worker Pool
-        - Use the execution container: `octopuslabs/k8s-workertools:1.29.0`
+        - **If you are running the tentacle in a container**
+            - Update the health check to use an execution container.  For the image use `octopuslabs/k8s-workertools:1.29.0`
         - Role: Use the role from your k8s cluster
         - YAML Source: Git Repository
         - Git Credentials: Use the git credentials from the library
