@@ -202,7 +202,7 @@ This activity will happen only if we have enough time.  We will install and conf
 - Configure first application 
     - Click the `New App` button
     - Application Name: `randomquotes-dev`
-    - Project Name: `Default`
+    - Project Name: `default`
     - Repository URL: `https://github.com/OctopusSamples/RandomQuotes-K8s.git`    
     - Paths: `k8s/overlays/dev`
     - Cluster Url: `https://kubernetes.default.svc`
