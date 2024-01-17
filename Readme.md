@@ -75,6 +75,19 @@ Go to your hosts file (if on Windows) and add the following entries.  The nginx 
 127.0.0.1       randomquotesprod.local
 ```
 
+## 5. Install Argo
+
+- Install ArgoCD
+    - Run `kubectl create namespace argocd`
+    - Run `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+- To access ArgoCD UI
+    - Run `kubectl port-forward svc/argocd-server -n argocd 8080:443`
+    - **Important** The port forwarding will only work while that window is open.
+    - If you want to, you can mess with ingress rules, but this is the quick and dirty approach to getting going.
+    - To login
+        - Username is admin
+        - Run `kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' --namespace argocd` to get the password
+
 # 200 Session at RKO
 
 All the activities below will be done at RKO.
@@ -183,16 +196,6 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
 
 This activity will happen only if we have enough time.  We will install and configure ArgoCD so we can compare and contrast the two.
 
-- Install ArgoCD
-    - Run `kubectl create namespace argocd`
-    - Run `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
-- To access ArgoCD UI
-    - Run `kubectl port-forward svc/argocd-server -n argocd 8080:443`
-    - **Important** The port forwarding will only work while that window is open.
-    - If you want to, you can mess with ingress rules, but this is the quick and dirty approach to getting going.
-    - To login
-        - Username is admin
-        - Run `kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' --namespace argocd` to get the password
 - Configure first application 
     - Click the `New App` button
     - Application Name: `randomquotes-dev`
