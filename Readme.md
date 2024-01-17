@@ -77,6 +77,8 @@ Go to your hosts file (if on Windows) and add the following entries.  The nginx 
 
 ## 5. Install Argo
 
+This will install ArgoCD on your cluster.  Perfect for poking around!
+
 - Install ArgoCD
     - Run `kubectl create namespace argocd`
     - Run `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
@@ -86,7 +88,8 @@ Go to your hosts file (if on Windows) and add the following entries.  The nginx 
     - If you want to, you can mess with ingress rules, but this is the quick and dirty approach to getting going.
     - To login
         - Username is admin
-        - Run `kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' --namespace argocd` to get the password
+        - Run `kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' --namespace argocd` to get the password.  
+        - Please note it is base64, which you will need to decode.  You can do that via an online editor, or PowerShell `[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("blahblahblah"))`
 
 # 200 Session at RKO
 
