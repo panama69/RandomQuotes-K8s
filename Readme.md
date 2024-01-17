@@ -93,7 +93,7 @@ These instructions will deploy the following to the default namespace.
 - Ingress Rule
 
 To perform the deployment do the following:
-- Go to https://hub.docker.com/r/octopussamples/randomquotes-k8s/tags and find the latest version tag (0.1.3 for example).  Update the `image`` entry in the randomquotes-deployment.yaml file.
+- Go to https://hub.docker.com/r/octopussamples/randomquotes-k8s/tags and find the latest version tag (0.1.3 for example).  Update the `image` entry in the randomquotes-deployment.yaml file.
 - Open up a command prompt or terminal.  Change the current directory in the terminal to the `k8s/base` folder in this repo. 
 - Run `kubectl apply -f randomquotes-secrets.yaml`
 - Run `kubectl apply -f randomquotes-deployment.yaml`
@@ -132,10 +132,10 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
 - Create a new project called `Random Quotes Manifest Files`
 - Add the following variables:
     - Name: spec:rules:0:host
-        - Values: randomquotesdev.local Environment: Development
-        - Values: randomquotestest.local Environment: Test
-        - Values: randomquotesstaging.local Environment: Staging
-        - Values: randomquotesprod.local Environment: Production
+        - Values: `randomquotesdev.local` with Environment scope: `Development`
+        - Values: `randomquotestest.local` with Environment scope: `Test`
+        - Values: `randomquotesstaging.local` with Environment scope: `Staging`
+        - Values: `randomquotesprod.local` with Environment scope: `Production`
         - Type: Text
     - Name: spec:template:spec:containers:0:image
         - Value: octopussamples/randomquotes-k8s:#{Octopus.Action.Package[randomquotes-k8s].PackageVersion}
@@ -155,7 +155,7 @@ In this example, we will put the kustomize overlays aside and instead use Octopu
         - Repository URL: https://github.com/OctopusSamples/RandomQuotes-K8s.git 
         - Branch Settings: main
         - Paths: k8s/base/randomquotes-secrets.yaml
-        - Structured Configuration Valures: Check the `Enable Structured Configuration Variables` checkbox
+        - Structured Configuration Values: Check the `Enable Structured Configuration Variables` checkbox
         - Namespace: #{Octopus.Environment.Name | ToLower}
     - Add a DEPLOY RAW KUBERNETES YAML
         - Name: Deploy Random Quotes
